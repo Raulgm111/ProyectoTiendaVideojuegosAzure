@@ -1,0 +1,68 @@
+﻿@model List<Producto>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">
+                    Id Producto
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    NombreProducto
+                </th>
+                <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">
+                    Lanzamiento
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Imagen
+                </th>
+                <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">
+                    Precio
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Eliminar
+                </th>
+                <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">
+                    Editar
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+            <tr class="border-b border-gray-200 dark:border-gray-700">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
+                    @item.IdProducto
+                </th>
+                <td class="px-6 py-4">
+                        @item.NombreProducto
+                </td>
+                <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                        @item.Lanzamiento
+                </td>
+                <td class="px-6 py-4">
+                        @item.Imagen
+                </td>
+                <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                        @item.Precio
+                 </td>
+                 <td class="px-6 py-4">
+                 <a asp-controller="Productos"
+                       asp-action="DeleteProducto"
+                       asp-route-ididproducto="@item.IdProducto"
+                       class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Eliminar
+                    </a>
+                    </td>
+                  <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">
+                     <a  asp-controller="Productos"
+                       asp-action="EditarProdAdmin"
+                       asp-route-IdProducto="@item.IdProducto"
+                       class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Editar
+                        </a>
+                     </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

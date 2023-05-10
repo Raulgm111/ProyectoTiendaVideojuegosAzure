@@ -1,0 +1,44 @@
+﻿@model Producto
+
+<div class="flex justify-center items-center h-full">
+    <form method="post" class="w-full max-w-md bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <input type="hidden" name="IdProducto" value="@Model.IdProducto" class="form-control" required />
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="NombreProducto">Nombre</label>
+            <input type="text" name="NombreProducto" value="@Model.NombreProducto" class="form-control appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="Lanzamiento">Lanzamiento</label>
+            <input type="text" name="Lanzamiento" value="@Model.Lanzamiento" class="form-control appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="Imagen">Imagen</label>
+            <input type="text" name="Imagen" value="@Model.Imagen" class="form-control appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="Precio">Precio</label>
+            <input type="text" name="Precio" value="@Model.Precio" class="form-control appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="Descripcion">Descripción</label>
+            <input type="text" name="Descripcion" value="@Model.Descripcion" class="form-control appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="Genero">Género</label>
+            <input type="text" name="Genero" value="@Model.Genero" class="form-control appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
+        </div>
+
+        <div class="flex items-center justify-center">
+            <button class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                Editar
+            </button>
+        </div>
+    </form>
+</div>
+

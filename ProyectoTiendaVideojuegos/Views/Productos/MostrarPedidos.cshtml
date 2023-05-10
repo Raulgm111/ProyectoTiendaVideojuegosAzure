@@ -1,0 +1,58 @@
+﻿@model List<DetallesPedido>
+@{
+    int idPedidoAnterior = -1;
+    int totalPedido = 0;
+}
+
+<!DOCTYPE html>
+<html>
+<body>
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <a asp-controller="Productos"
+               asp-action="MisVistas"
+               class="flex items-center">
+                <img src="~/Images/LogoBetaGaming.jpg" alt="Logo" class="h-10 mr-4" style="border-radius: 30px;">
+                <h2 class="text-2xl font-bold mb-4">Tus pedidos</h2>
+            </a>
+            @foreach (var item in Model)
+            {
+                <ul>
+                    @if (idPedidoAnterior != item.IdPedido)
+                    {
+                        @if (idPedidoAnterior != -1)
+                        {
+                            <li class="bg-gray-100 py-4 px-8 mb-4">
+                                <p class="text-gray-600 font-bold">Total: @totalPedido €</p>
+                            </li>
+                        }
+                        <li class="bg-gray-100 py-4 px-8 mb-4">
+                            <h3 class="font-bold text-gray-700">Pedido #@item.IdPedido</h3>
+                        </li>
+                        totalPedido = 0; // reiniciar totalPedido a cero para el nuevo pedido
+                    }
+
+                    <li class="bg-gray-100 py-4 px-8 mb-4">
+                        <p class="text-gray-600">@item.NombreProducto</p>
+                        <p class="text-gray-600">Cantidad: @item.Cantidad </p>
+                        <p class="text-gray-600">Precio: @item.PrecioTotal €</p>
+                    </li>
+                </ul>
+
+                totalPedido += item.PrecioTotal;
+                idPedidoAnterior = item.IdPedido;
+            }
+
+            @if (idPedidoAnterior != -1)
+            {
+                <li class="bg-gray-100 py-4 px-8 mb-4">
+                    <p class="text-gray-600 font-bold">Total: @totalPedido €</p>
+                </li>
+            }
+        </div>
+    </section>
+    </body>
+</html>
+
+
+

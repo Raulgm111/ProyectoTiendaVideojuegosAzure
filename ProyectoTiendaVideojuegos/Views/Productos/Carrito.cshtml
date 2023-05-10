@@ -1,0 +1,154 @@
+﻿@model List<Producto>
+<head>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-neutral-50 py-12">
+        <div class="container mx-auto my-12">
+            <div class="flex flex-col gap-6 md:flex-row">
+                <div class="flex-1 shrink-0 rounded-sm border border-neutral-200 bg-white px-4 py-8 shadow-sm">
+                    <div class="mb-8">
+                        <a asp-controller="Productos"
+                           asp-action="MisVistas"
+                           class="flex items-center">
+                            <img src="~/Images/LogoBetaGaming.jpg" alt="Logo" class="h-10 mr-4" style="border-radius: 30px;">
+                            <h3 class="text-2xl font-bold">Carrito</h3>
+                        </a>
+                    </div>
+                    @if (Context.Session.GetObject<List<int>>("CARRITO") == null && Model == null)
+                    {
+                        <p>No hay productos en el carrito</p>
+                    }else{
+                    @foreach (var item in Model)
+                    {
+                        <ul role="list" class="-my-6 divide-y divide-neutral-200">
+                            <!-- product item 1 -->
+                            <li class="flex py-6">
+                                <div class="h-32 w-24 flex-shrink-0 overflow-hidden rounded-sm border bg-neutral-50">
+                                    <img src="@Url.Content(@item.Imagen)" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="h-full w-full object-cover object-center" />
+                                </div>
+
+                                <div class="ml-4 flex flex-1 flex-col">
+                                    <div>
+                                        <div class="flex justify-between text-sm text-gray-900">
+                                            <h3 class="text-base font-bold"><a href="#"> @item.NombreProducto </a></h3>
+                                            <button type="button" class="flex gap-2 font-medium text-neutral-400 hover:text-neutral-900">
+                                                <a asp-route-eliminarTodo="@item.IdProducto" asp-controller="Productos" asp-action="Carrito">
+                                                    <p class="text-xs font-normal">Eliminar</p>
+                                                    <svg class="h-4 w-4 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                                </a>
+                                            </button>
+                                        </div>
+                                        <div class="mt-2">
+                                            <p class="text-xs text-neutral-400">@item.Genero</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-auto flex flex-1 items-end justify-between text-sm">
+                                        <div>
+                                            <label for="cantidad" class="sr-only">Cantidad</label>
+                                            <select id="cantidad-@item.IdProducto" name="cantidad" class="mt-1 block border-gray-500 py-2 pl-3 pr-10 text-base focus:border-neutral-500 focus:outline-none focus:ring-neutral-500 sm:text-sm">
+                                                <option id="cantidadValue" name="cantidadValue">@(Context.Session.GetObject<List<int>>("CARRITO") != null ? Context.Session.GetObject<List<int>>("CARRITO").Count(x => x == item.IdProducto) : 0)</option>
+                                            </select>
+                                            <div class="inline-flex">
+                                              <a class="text-sm hover:bg-purple-100 text-gray-700 block px-4 py-2"
+                                               asp-controller="Productos"
+                                               asp-action="Carrito"
+                                               asp-route-idproductoCarrito="@item.IdProducto"
+                                               asp-route-cantidad="1">
+                                                    <h1 style="font-weight:900;  font-size: 200%;">+</h1>
+                                                </a>
+                                                <a class="text-sm hover:bg-purple-100 text-gray-700 block px-4 py-2" asp-route-ideliminar="@item.IdProducto" asp-controller="Productos" asp-action="Carrito">
+                                                    <h1 style="font-weight:900;  font-size: 200%;">-</h1>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex">
+                                            <div class="text-right">
+                                                <p class="text-sm font-bold text-orange-600">Precio: <span id="precioTotal-@item.IdProducto"></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <script>
+                            var precio = @item.Precio;
+                            var cantidadSelect = document.getElementById("cantidad-"+@item.IdProducto);
+                            var precioTotal = document.getElementById("precioTotal-"+@item.IdProducto);
+                            var cantidad = parseInt(cantidadSelect.value);
+                            precioTotal.textContent = precio * cantidad + "€";
+                        </script>
+                    }
+                    }
+                </div>
+
+            <!-- Total -->
+            <div class="sticky space-y-4 rounded-sm border border-neutral-200 bg-white py-6 px-4 shadow-sm sm:px-6 md:w-1/3">
+                <h4 class="text-2xl font-bold">Detalles Pedido</h4>
+                <div class="flex flex-col gap-2">
+                    @if (Context.Session.GetObject<List<int>>("CARRITO") == null && Model == null)
+                    {
+                        <p>No hay productos en el carrito</p>
+                    }else{
+                        @foreach (var item in Model)
+                        {
+                            <div class="flex justify-between text-base text-gray-900">
+                                <p>@item.NombreProducto</p>
+                                <select id="cantidadFinal-@item.IdProducto" name="cantidadFinal" class="hidden">
+                                    <option id="cantidadValue" name="cantidadValue">@(Context.Session.GetObject<List<int>>("CARRITO") != null ? Context.Session.GetObject<List<int>>("CARRITO").Count(x => x == item.IdProducto) : 0)</option>
+                                </select>
+                                <p id="precioTotalFinal-@item.IdProducto"></p>
+                                <script>
+                                    var precioFinal = @item.Precio;
+                                    var cantidadSelectFinal = document.getElementById("cantidadFinal-" + @item.IdProducto);
+                                    var precioTotalFinal = document.getElementById("precioTotalFinal-" + @item.IdProducto);
+                                    var cantidadFinal = parseInt(cantidadSelectFinal.value);
+                                    var precioTotalProducto = precioFinal * cantidadFinal;
+                                    precioTotalFinal.textContent = precioTotalProducto + "€";
+                                </script>
+                            </div>
+                        }
+                        }
+                        <div>
+                            <div class="my-2 w-full border-t border-gray-300"></div>
+                            <div class="flex justify-between text-base font-bold text-gray-900">
+                                <p>Precio Total</p>
+                                <p id="precioTotalCarrito"></p>
+                            </div>
+                        </div>
+                    <!-- Boton finalizar -->
+                    <div class="mt-auto flex flex-col gap-2 pt-4">
+                        <div class="flex justify-center text-center text-sm text-gray-500">
+                            <p>
+                                <form method="post" asp-action="Pedidos">
+                                    <button class="w-full border-0 py-2 px-6 focus:outline-none font-semibold rounded bn632-hover bn18">
+                                            Finalizar Compra
+                                    </button>
+                                    </form>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+    <script>
+        var elementosPrecioTotal = document.querySelectorAll('[id^="precioTotalFinal-"]');
+
+        var total = 0;
+        elementosPrecioTotal.forEach(function (elemento) {
+            total += parseInt(elemento.textContent);
+        });
+        var precioTotalCarrito = document.getElementById("precioTotalCarrito");
+        precioTotalCarrito.textContent = total + "€";
+    </script>
+</body>

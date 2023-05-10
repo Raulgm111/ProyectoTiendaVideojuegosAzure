@@ -1,0 +1,94 @@
+﻿@model List<Producto>
+<div class="mx-auto container px-4 md:px-6 2xl:px-0 py-12 flex justify-center items-center">
+    <div class="flex flex-col jusitfy-start items-start">
+        <div class="mt-3">
+            <a asp-controller="Productos"
+               asp-action="MisVistas"
+               class="flex items-center">
+                <img src="~/Images/LogoBetaGaming.jpg" alt="Logo" class="h-10 mr-4" style="border-radius: 30px;">
+                <h1 class="text-3xl lg:text-4xl tracking-tight font-semibold leading-8 lg:leading-9 text-gray-800 dark:text-white dark:text-white">Favoritos</h1>
+            </a>
+        </div>
+        <div class="mt-4">
+        </div>
+        <div class="mt-10 lg:mt-12 grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-10 lg:gap-y-0">
+            @if (Context.Session.GetObject<List<int>>("FAVORITO") == null && Model == null)
+            {
+                <p>No hay productos favoritos</p>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="flex flex-col">
+                        <div class="relative">
+                            <img class="hidden lg:block" src="@Url.Content(@item.Imagen)" alt="bag" />
+                            <img class="hidden sm:block lg:hidden" src="@Url.Content(@item.Imagen)" alt="bag" />
+                            <img class="sm:hidden" src="@Url.Content(@item.Imagen)" alt="bag" />
+                            <button aria-label="close" class="top-4 right-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 absolute p-1.5 bg-gray-800 dark:bg-white dark:text-gray-800 text-white hover:text-gray-400">
+                                <a asp-route-ideliminar="@item.IdProducto" asp-controller="Productos" asp-action="Favoritos">
+                                    <svg class="fil-current" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                        <path d="M13 1L1 13" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M1 1L13 13" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </a>
+                            </button>
+                        </div>
+                        <div class="mt-6 flex justify-between items-center">
+                            <div class="flex justify-center items-center">
+                                <p class="tracking-tight text-2xl font-semibold leading-6 text-gray-800 dark:text-white">@item.NombreProducto</p>
+                            </div>
+                            <div class="flex justify-center items-center">
+                                <button class="flex ml-auto border-0 py-2 px-6 focus:outline-none font-semibold rounded bn632-hover bn18">
+                                    <a asp-controller="Productos"
+                               asp-action="VistasDetalles"
+                               asp-route-idproducto="@item.IdProducto">
+                                        Comprar
+                                    </a>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="menu1" class="flex flex-col jusitfy-start items-start mt-12">
+                        </div>
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
+</div>
+@*<script>
+    // more free and premium Tailwind CSS components at https://tailwinduikit.com/
+    handleClick1 = (flag) => {
+        let icon = document.getElementById("chevronDown1");
+        let icon2 = document.getElementById("chevronUp1");
+        let menu = document.getElementById("menu1");
+        if (flag) {
+            menu.classList.toggle("hidden");
+            icon.classList.toggle("hidden");
+            icon2.classList.toggle("hidden");
+        }
+    };
+
+    handleClick2 = (flag) => {
+        let icon = document.getElementById("chevronDown2");
+        let icon2 = document.getElementById("chevronUp2");
+        let menu = document.getElementById("menu2");
+        if (flag) {
+            menu.classList.toggle("hidden");
+            icon.classList.toggle("hidden");
+            icon2.classList.toggle("hidden");
+        }
+    };
+
+    handleClick3 = (flag) => {
+        let icon = document.getElementById("chevronDown3");
+        let icon2 = document.getElementById("chevronUp3");
+        let menu = document.getElementById("menu3");
+        if (flag) {
+            menu.classList.toggle("hidden");
+            icon.classList.toggle("hidden");
+            icon2.classList.toggle("hidden");
+        }
+    };
+</script>*@
