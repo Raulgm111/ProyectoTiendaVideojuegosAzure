@@ -271,20 +271,6 @@ namespace ProyectoTiendaVideojuegos.Controllers
                   
         }
 
-
-
-
-
-
-        //public IActionResult Pedidos()
-        //{
-        //    List<int> carrito = HttpContext.Session.GetObject<List<int>>("CARRITO");
-        //    List<Producto> productos = this.repo.BuscarProductoCarrito(carrito);
-        //    HttpContext.Session.Remove("CARRITO");
-        //    return View(productos);
-        //}
-
-
         [AuthorizeClientes]
         public IActionResult Favoritos(int? idproductoFav, int? ideliminar)
         {

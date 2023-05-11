@@ -249,15 +249,5 @@ namespace ProyectoTiendaVideojuegos.Repositories
             this.context.SaveChanges();
         }
 
-
-
-
-
-
-
-
-
-
-
     }
 }
