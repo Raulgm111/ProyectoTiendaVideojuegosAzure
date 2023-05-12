@@ -215,19 +215,19 @@
 
         </div>
     </div>
-        <script>
-                function buscarProductos() {
-                    var buscar = document.getElementById("buscar").value;
-                    $.ajax({
-                        url: '@Url.Action("BuscarProductos", "Productos")',
-                        type: 'GET',
-                        data: { buscar: buscar },
-                        success: function (data) {
-                            $("#resultados").html(data);
-                        }
-                    });
+    <script>
+        function buscarProductos() {
+            var buscar = document.getElementById("buscar").value;
+            $.ajax({
+                url: '@Url.Action("BuscarProductos", "Productos")',
+                type: 'GET',
+                data: { buscar: buscar },
+                success: function (data) {
+                    $("#resultados").html(data);
                 }
-        </script>
+            });
+        }
+    </script>
 </body>
 
 
