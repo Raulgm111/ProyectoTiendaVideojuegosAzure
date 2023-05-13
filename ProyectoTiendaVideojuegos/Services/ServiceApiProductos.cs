@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using ProyectoTiendaVideojuegos.Extensions;
 using ProyectoTiendaVideojuegos.Filters;
+using Microsoft.CodeAnalysis;
 
 namespace ProyectoTiendaVideojuegosAzure.Services
 {
@@ -116,24 +117,26 @@ namespace ProyectoTiendaVideojuegosAzure.Services
 
         #region VISTAS COMPLETAS
 
-        public async Task<CategoriasViewModel> VistasGridTodosProductos(List<string> plataforma,
+        public async Task<CategoriasViewModel> VistasGridTodosProductos(List<string> plataformas,
                 List<string> generos, int? precioMinimo, int? precioMaximo, int? idproductoCarrito)
         {
             string requestCategorias = "/api/productos/GetCategorias";
             string requestSubCategorias = "/api/productos/GetSubCategorias";
-            string requestFiltrarPlataforma = "/api/filtros/FiltrarPorPlataforma";
-            string requestFiltrarGenero = "/api/filtros/FiltrarPorGenero";
+            string requestFiltrarPlataforma = "/api/Filtros/FiltrarPorPlataforma";
+            string requestFiltrarGenero = "/api/Filtros/FiltrarPorGenero";
             string requestTodosProductos = "/api/productos/GetTodosProductos";
             CategoriasViewModel enlace = new CategoriasViewModel();
             enlace.Categorias = await this.CallApiAsync<List<Categoria>>(requestCategorias);
             enlace.Subcategorias = await this.CallApiAsync<List<SubCategoria>>(requestSubCategorias);
-            if (plataforma != null && plataforma.Any())
+            if (plataformas != null && plataformas.Any())
             {
-                enlace.Productos = await this.CallApiAsync<List<Producto>>(requestFiltrarPlataforma);
+                string url = $"{requestFiltrarPlataforma}?plataformas={string.Join("&", plataformas)}";
+                enlace.Productos = await this.CallApiAsync<List<Producto>>(url);
             }
             else if (generos != null && generos.Any())
             {
-                enlace.Productos = await this.CallApiAsync<List<Producto>>(requestFiltrarGenero);
+                string url = $"{requestFiltrarGenero}?generos={string.Join("&", generos)}";
+                enlace.Productos = await this.CallApiAsync<List<Producto>>(url);
             }
             else
             {
@@ -147,25 +150,27 @@ namespace ProyectoTiendaVideojuegosAzure.Services
             return enlace;
         }
 
-        public async Task<CategoriasViewModel> VistasGrid(int id, List<string> plataforma,
+        public async Task<CategoriasViewModel> VistasGrid(int id, List<string> plataformas,
             List<string> generos, int? precioMinimo, int? precioMaximo)
         {
             string requestCategorias = "/api/productos/GetCategorias";
             string requestSubCategorias = "/api/productos/GetSubCategorias";
             string requestGetGrid = "/api/productos/GetPorductosGrid/" + id;
-            string requestFiltrarPlataforma = "/api/filtros/FiltrarPorPlataforma";
-            string requestFiltrarGenero = "/api/filtros/FiltrarPorGenero";
+            string requestFiltrarPlataforma = "/api/Filtros/FiltrarPorPlataforma";
+            string requestFiltrarGenero = "/api/Filtros/FiltrarPorGenero";
             CategoriasViewModel enlace = new CategoriasViewModel();
             enlace.Categorias = await this.CallApiAsync<List<Categoria>>(requestCategorias);
             enlace.Subcategorias = await this.CallApiAsync<List<SubCategoria>>(requestSubCategorias);
             enlace.Productos = await this.CallApiAsync<List<Producto>>(requestGetGrid);
-            if (plataforma != null && plataforma.Any())
+            if (plataformas != null && plataformas.Any())
             {
-                enlace.Productos = await this.CallApiAsync<List<Producto>>(requestFiltrarPlataforma);
+                string url = $"{requestFiltrarPlataforma}?plataformas={string.Join("&", plataformas)}";
+                enlace.Productos = await this.CallApiAsync<List<Producto>>(url);
             }
             else if (generos != null && generos.Any())
             {
-                enlace.Productos = await this.CallApiAsync<List<Producto>>(requestFiltrarGenero);
+                string url = $"{requestFiltrarGenero}?generos={string.Join("&", generos)}";
+                enlace.Productos = await this.CallApiAsync<List<Producto>>(url);
             }
 
             if (precioMinimo.HasValue && precioMaximo.HasValue)

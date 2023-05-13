@@ -23,10 +23,10 @@ namespace ProyectoTiendaVideojuegos.Controllers
             return PartialView("_ResultadosBusqueda", productos);
         }
 
-        public async Task<IActionResult> VistasGridTodosProductos(List<string> plataforma,
+        public async Task<IActionResult> VistasGridTodosProductos(List<string> plataformas,
                 List<string> generos, int? precioMinimo, int? precioMaximo, int? idproductoCarrito)
         {
-            CategoriasViewModel enlace = await this.service.VistasGridTodosProductos(plataforma, generos, precioMinimo, precioMaximo, idproductoCarrito);
+            CategoriasViewModel enlace = await this.service.VistasGridTodosProductos(plataformas, generos, precioMinimo, precioMaximo, idproductoCarrito);
             return View(enlace);
         }
 

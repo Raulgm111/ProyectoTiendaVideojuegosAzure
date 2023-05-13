@@ -108,7 +108,7 @@
                             {
                             <li>
                                 <div class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                                    <input value="@item.NombreCategoria" name="plataforma" id="consolas-checkbox" type="checkbox" class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <input value="@item.NombreCategoria" name="plataformas" id="consolas-checkbox" type="checkbox" class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                     <label for="consolas-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">@item.NombreCategoria</label>
                                 </div>
                             </li>
@@ -136,19 +136,22 @@
                                   clip-rule="evenodd"></path>
                         </svg>
                     </button>
-                    <ul id="dropdown-example3" class="hidden py-2 space-y-2">
-                        @foreach (Producto item in Model.Productos)
-                            {
-                        <li>
-                            <div class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                                <input value="@item.Genero" name="generos" id="aventura-checkbox" type="checkbox" class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label for="aventura-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">@item.Genero</label>
-                            </div>
-                        </li>
+                        @if (Model.Productos != null)
+                        {
+                            <ul id="dropdown-example3" class="hidden py-2 space-y-2">
+                                @foreach (Producto item in Model.Productos)
+                                {
+                                    <li>
+                                        <div class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                            <input value="@item.Genero" name="generos" id="aventura-checkbox" type="checkbox" class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="aventura-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">@item.Genero</label>
+                                        </div>
+                                    </li>
+                                }
+                                <button type="submit" class="px-3 py-1 font-semibold rounded bn1-hover bn2">Filtrar</button>
+                            </ul>
                         }
-                        <button type="submit" class="px-3 py-1 font-semibold rounded bn1-hover bn2">Filtrar</button>
-                    </ul>
-                </li>
+                    </li>
                 </form>
                 @*                Filtro4*@
                 <li>
@@ -191,25 +194,28 @@
     <!-- card -->
     <div id="resultados" class="bodyCartas">
         <div class="containerCartas">
-            @foreach (var item in Model.Productos)
+                                    @if (Model.Productos != null)
             {
-                <div class="w-80 bg-white shadow-2xl rounded-lg overflow-hidden my-10">
-                    <div class="px-4 py-2">
-                        <h1 class="text-gray-900 font-bold text-2rem uppercase">@item.NombreProducto</h1>
-                        <p class="text-gray-600 text-sm mt-1">@item.Genero</p>
-                    </div>
-                    <img class="object-contain h-80 mt-2" src="@Url.Content(@item.Imagen)">
-                    <div class="flex items-center justify-between px-4 py-2 bg-purple-900">
-                        <h1 class="text-gray-200 font-bold text-xl">@item.Precio€</h1>
-                        <button class="px-3 py-1 font-semibold rounded bn632-hover bn18">
-                            <a asp-controller="Productos"
+                @foreach (var item in Model.Productos)
+                {
+                    <div class="w-80 bg-white shadow-2xl rounded-lg overflow-hidden my-10">
+                        <div class="px-4 py-2">
+                            <h1 class="text-gray-900 font-bold text-2rem uppercase">@item.NombreProducto</h1>
+                            <p class="text-gray-600 text-sm mt-1">@item.Genero</p>
+                        </div>
+                        <img class="object-contain h-80 mt-2" src="@Url.Content(@item.Imagen)">
+                        <div class="flex items-center justify-between px-4 py-2 bg-purple-900">
+                            <h1 class="text-gray-200 font-bold text-xl">@item.Precio€</h1>
+                            <button class="px-3 py-1 font-semibold rounded bn632-hover bn18">
+                                <a asp-controller="Productos"
                            asp-action="VistasDetalles"
                            asp-route-idproducto="@item.IdProducto">
-                                Comprar
-                            </a>
-                        </button>
+                                    Comprar
+                                </a>
+                            </button>
+                        </div>
                     </div>
-                </div>
+                }
             }
 
 

@@ -1,6 +1,6 @@
 ﻿@model List<Producto>
 
-@if (Model == null)
+@if (Model == null || !Model.Any())
 {
     <p>¡No se encontraron resultados!</p>
 }
