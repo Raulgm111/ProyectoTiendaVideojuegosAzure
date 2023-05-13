@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using ProyectoTiendaVideojuegos.Extensions;
 using ProyectoTiendaVideojuegos.Filters;
 using Microsoft.CodeAnalysis;
+using ProyectoTiendaVideojuegos.Helpers;
 
 namespace ProyectoTiendaVideojuegosAzure.Services
 {
@@ -436,5 +437,32 @@ namespace ProyectoTiendaVideojuegosAzure.Services
             string request = "/api/productos/UpdatePorducto";
             await this.CallApiAsync<Producto>(request);
         }
+
+        public async Task RegisterAsync(string nombre, string apellidos, string email, string password, string imagen)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string request = "/api/auth/register";
+                client.BaseAddress = new Uri(this.UrlApiProductos);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(this.Header);
+
+                string salt = HelperCryptography.GenerateSalt();
+                Cliente user = new Cliente
+                {
+                    Nombre = nombre,
+                    Apellidos = apellidos,
+                    Email = email,
+                    Imagen = imagen,
+                    Salt = salt,
+                    Contraseña = HelperCryptography.EncryptPassword(password, salt)
+                };
+
+                string jsonUser = JsonConvert.SerializeObject(user);
+                StringContent content = new StringContent(jsonUser, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(request, content);
+            }
+        }
+
     }
 }

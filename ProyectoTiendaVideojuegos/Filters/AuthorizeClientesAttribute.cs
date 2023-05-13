@@ -11,10 +11,15 @@ namespace ProyectoTiendaVideojuegos.Filters
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var user = context.HttpContext.User;
-
-            if (user.Identity.IsAuthenticated==false)
+            if (user.Identity.IsAuthenticated == false)
             {
-                context.Result = this.GetRoute("Managed", "LogIn");
+                RouteValueDictionary routeLogin =
+                    new RouteValueDictionary(new
+                    {
+                        controller = "Managed",
+                        action = "Login"
+                    });
+                context.Result = new RedirectToRouteResult(routeLogin);
             }
         }
 
