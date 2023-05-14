@@ -132,12 +132,12 @@ namespace ProyectoTiendaVideojuegosAzure.Services
             enlace.Subcategorias = await this.CallApiAsync<List<SubCategoria>>(requestSubCategorias);
             if (plataformas != null && plataformas.Any())
             {
-                string url = $"{requestFiltrarPlataforma}?plataformas={string.Join("&", plataformas)}";
+                string url = $"{requestFiltrarPlataforma}?plataformas={string.Join("&plataformas=", plataformas)}";
                 enlace.Productos = await this.CallApiAsync<List<Producto>>(url);
             }
             else if (generos != null && generos.Any())
             {
-                string url = $"{requestFiltrarGenero}?generos={string.Join("&", generos)}";
+                string url = $"{requestFiltrarGenero}?generos={string.Join("&generos=", generos)}";
                 enlace.Productos = await this.CallApiAsync<List<Producto>>(url);
             }
             else
@@ -166,12 +166,12 @@ namespace ProyectoTiendaVideojuegosAzure.Services
             enlace.Productos = await this.CallApiAsync<List<Producto>>(requestGetGrid);
             if (plataformas != null && plataformas.Any())
             {
-                string url = $"{requestFiltrarPlataforma}?plataformas={string.Join("&", plataformas)}";
+                string url = $"{requestFiltrarPlataforma}?plataformas={string.Join("&plataformas=", plataformas)}";
                 enlace.Productos = await this.CallApiAsync<List<Producto>>(url);
             }
             else if (generos != null && generos.Any())
             {
-                string url = $"{requestFiltrarGenero}?generos={string.Join("&", generos)}";
+                string url = $"{requestFiltrarGenero}?generos={string.Join("&generos=", generos)}";
                 enlace.Productos = await this.CallApiAsync<List<Producto>>(url);
             }
 
@@ -222,8 +222,8 @@ namespace ProyectoTiendaVideojuegosAzure.Services
                     carrito.Add(idproductoAñadir.Value);
                     _httpContextAccessor.HttpContext.Session.SetObject("CARRITO", carrito);
                 }
-
             }
+
             if (idproductoAñadirFav != null)
             {
                 List<int> favoritos;
@@ -240,7 +240,6 @@ namespace ProyectoTiendaVideojuegosAzure.Services
                     favoritos.Add(idproductoAñadirFav.Value);
                     _httpContextAccessor.HttpContext.Session.SetObject("FAVORITO", favoritos);
                 }
-
             }
             enlace.Producto = await this.CallApiAsync<Producto>(requestDetallesProducto);
             return enlace;
@@ -345,10 +344,12 @@ namespace ProyectoTiendaVideojuegosAzure.Services
                     _httpContextAccessor.HttpContext.Session.SetObject("CARRITO", carrito);
                 }
 
-                List<Producto> productos = await this.CallApiAsync<List<Producto>>(request);
+                string url = $"/api/productos/BuscarProductoCarrito?idproductoCarrito={string.Join("&idproductoCarrito=", carrito)}";
+                List<Producto> productos = await this.CallApiAsync<List<Producto>>(url);
                 return productos;
             }
         }
+
 
         #endregion
 
@@ -401,7 +402,8 @@ namespace ProyectoTiendaVideojuegosAzure.Services
                         }
                     }
                 }
-                List<Producto> productos = await this.CallApiAsync<List<Producto>>(requestBuscarProducto);
+                string url = $"/api/productos/BuscarProductoFavorito?idproductoFav={string.Join("&idproductoFav=", favoritos)}";
+                List<Producto> productos = await this.CallApiAsync<List<Producto>>(url);
                 return productos;
 
             }
