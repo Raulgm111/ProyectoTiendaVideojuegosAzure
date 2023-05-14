@@ -16,12 +16,14 @@ namespace ProyectoTiendaVideojuegos.Controllers
         {
             return View();
         }
+
         [HttpPost]
-        public async Task<IActionResult> Register(string nombre, string apellidos, string email, string password, string imagen)
+        public async Task<IActionResult> Register(string nombre, string apellidos, string email, string password)
         {
-            await this.service.RegisterAsync(nombre, apellidos, email, password, imagen);
+            await this.service.RegisterAsync(nombre, apellidos, email, password);
             return RedirectToAction("MisVistas", "Productos");
         }
+
 
     }
 }

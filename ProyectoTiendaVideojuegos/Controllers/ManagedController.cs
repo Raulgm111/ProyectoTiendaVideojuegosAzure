@@ -34,7 +34,8 @@ namespace ProyectoTiendaVideojuegos.Controllers
             }
             else
             {
-                Cliente cliente = new Cliente();
+                Cliente cliente =
+                    await this.service.GetPerfilUsuarioAsync(token);
                 HttpContext.Session.SetString("TOKEN", token);
                 ClaimsIdentity identity =
                 new ClaimsIdentity
@@ -68,13 +69,20 @@ namespace ProyectoTiendaVideojuegos.Controllers
             }
         }
 
+        public async Task<IActionResult> Perfil()
+        {
+            string token = HttpContext.Session.GetString("TOKEN");
+            Cliente usuario = await this.service.GetPerfilUsuarioAsync(token);
+            return View(usuario);
+        }
+
 
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync
             (CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Remove("TOKEN");
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("MisVistas", "Productos");
         } 
     }
 }

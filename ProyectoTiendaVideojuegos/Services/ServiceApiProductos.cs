@@ -10,6 +10,7 @@ using ProyectoTiendaVideojuegos.Extensions;
 using ProyectoTiendaVideojuegos.Filters;
 using Microsoft.CodeAnalysis;
 using ProyectoTiendaVideojuegos.Helpers;
+using ProyectoTiendaVideojuegos.Data;
 
 namespace ProyectoTiendaVideojuegosAzure.Services
 {
@@ -437,32 +438,44 @@ namespace ProyectoTiendaVideojuegosAzure.Services
             string request = "/api/productos/UpdatePorducto";
             await this.CallApiAsync<Producto>(request);
         }
-
-        public async Task RegisterAsync(string nombre, string apellidos, string email, string password, string imagen)
+        public async Task RegisterAsync(string nombre, string apellidos, string email, string password)
         {
             using (HttpClient client = new HttpClient())
             {
-                string request = "/api/auth/register";
+                string request = "/api/auth/register/" + nombre + "/" + apellidos + "/" + email + "/" + password;
                 client.BaseAddress = new Uri(this.UrlApiProductos);
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(this.Header);
-
                 string salt = HelperCryptography.GenerateSalt();
-                Cliente user = new Cliente
-                {
-                    Nombre = nombre,
-                    Apellidos = apellidos,
-                    Email = email,
-                    Imagen = imagen,
-                    Salt = salt,
-                    Contraseña = HelperCryptography.EncryptPassword(password, salt)
-                };
 
-                string jsonUser = JsonConvert.SerializeObject(user);
-                StringContent content = new StringContent(jsonUser, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(request, content);
+                Cliente user = new Cliente();
+                    user.Nombre = nombre;
+                    user.Apellidos = apellidos;
+                    user.Email = email;
+                    user.Contraseña = HelperCryptography.EncryptPassword(password, salt);
+                string jsonUser =
+                    JsonConvert.SerializeObject(user);
+                StringContent content =
+                    new StringContent(jsonUser, Encoding.UTF8, "application/json");
+                HttpResponseMessage response =
+                    await client.PostAsync(request, content);
+                if (!response.IsSuccessStatusCode)
+                {
+                    // handle error
+                    throw new Exception("Failed to register user.");
+                }
             }
         }
+
+        public async Task<Cliente> GetPerfilUsuarioAsync
+        (string token)
+        {
+            string request = "/api/auth/PerfilUsuario";
+            Cliente usuario = await
+                this.CallApiAsync<Cliente>(request, token);
+            return usuario;
+        }
+
 
     }
 }
