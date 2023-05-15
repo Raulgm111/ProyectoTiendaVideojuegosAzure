@@ -1,6 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using ProyectoTiendaVideojuegosAzure.Models;
+using NugetProyectoTinedaVideojuegosAzure;
 
 namespace ProyectoTiendaVideojuegosAzure.Services
 {

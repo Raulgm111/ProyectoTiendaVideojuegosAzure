@@ -210,9 +210,9 @@ namespace ProyectoTiendaVideojuegos.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Pedidos(Producto p)
+        public async Task<IActionResult> Pedidos()
         {
-            await this.service.Pedidos(p);
+            await this.service.Pedidos();
             int idcliente = int.Parse(HttpContext.User.FindFirst("IdCliente").Value);
             return RedirectToAction("MostrarPedidos", new { idcliente = idcliente });
         }

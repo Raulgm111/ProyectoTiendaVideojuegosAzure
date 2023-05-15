@@ -358,10 +358,13 @@ namespace ProyectoTiendaVideojuegosAzure.Services
             return pedidos;
         }
 
-        public async Task Pedidos(Producto p)
+        public async Task Pedidos()
         {
             using (HttpClient client = new HttpClient())
             {
+                // Establecer la dirección base de la API
+                client.BaseAddress = new Uri("https://apioauthproyectotiendavideojuegosrgm.azurewebsites.net/");
+
                 List<int> carrito = _httpContextAccessor.HttpContext.Session.GetObject<List<int>>("CARRITO");
                 int idCliente = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("IdCliente").Value);
 
@@ -375,36 +378,27 @@ namespace ProyectoTiendaVideojuegosAzure.Services
                 // Crear una lista de objetos anónimos con los valores necesarios
                 var productosNuevos = productos.Select(prod => new
                 {
-                    IdProducto = prod.IdProducto,
-                    IdCategoria = prod.IdCategoria,
-                    IdSubCategoria = prod.IdSubCategoria,
-                    NombreProducto = p.NombreProducto,
-                    Lanzamiento = prod.Lanzamiento,
-                    Imagen = prod.Imagen,
-                    Precio = prod.Precio,
-                    Descripcion = prod.Descripcion,
-                    Genero = prod.Genero
+                    idProducto = prod.IdProducto,
+                    idCategoria = prod.IdCategoria,
+                    idSubCategoria = prod.IdSubCategoria,
+                    nombreProducto = prod.NombreProducto,
+                    lanzamiento = prod.Lanzamiento,
+                    imagen = prod.Imagen,
+                    precio = prod.Precio,
+                    descripcion = prod.Descripcion,
+                    genero = prod.Genero
                 }).ToList();
 
                 // Convertir la lista de productos a formato JSON
-                string jsonCubo =
-                    JsonConvert.SerializeObject(productosNuevos);
-                string url = $"{requestAgregarPedido}?productos={Uri.EscapeDataString(jsonCubo)}&cantidad={carrito.Count}";
-                StringContent content =
-                    new StringContent(jsonCubo, Encoding.UTF8, "application/json");
-                HttpResponseMessage response =
-                    await client.PostAsync(url, content);
+                string jsonCubo = JsonConvert.SerializeObject(productosNuevos);
+
+                string url = $"{requestAgregarPedido}?cantidad={carrito.Count}";
+                HttpContent content = new StringContent(jsonCubo, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(url, content);
 
                 _httpContextAccessor.HttpContext.Session.Remove("CARRITO");
             }
         }
-
-
-
-
-
-
-
 
 
         public async Task<List<Producto>> Favoritos(int? idproductoFav, int? ideliminar)
