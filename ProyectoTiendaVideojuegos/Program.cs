@@ -1,8 +1,14 @@
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using ProyectoTiendaVideojuegosAzure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+string azureKeys = builder.Configuration.GetValue<string>("AzureKeys:StorageAccount");
+BlobServiceClient blobServiceClient =
+    new BlobServiceClient(azureKeys);
+builder.Services.AddTransient<BlobServiceClient>(x => blobServiceClient);
+builder.Services.AddTransient<ServiceStorageBlobs>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options => {
 

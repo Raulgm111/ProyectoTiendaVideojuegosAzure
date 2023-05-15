@@ -14,7 +14,11 @@
         <div class="mt-10 lg:mt-12 grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-10 lg:gap-y-0">
             @if (Context.Session.GetObject<List<int>>("FAVORITO") == null && Model == null)
             {
-                <p>No hay productos favoritos</p>
+                @if (ViewBag.MensajeCarritoVacio != null)
+                    {
+                        <p>@ViewBag.MensajeCarritoVacio</p>
+                    }
+
             }
             else
             {
@@ -22,9 +26,9 @@
                 {
                     <div class="flex flex-col">
                         <div class="relative">
-                            <img class="hidden lg:block" src="@Url.Content(@item.Imagen)" alt="bag" />
-                            <img class="hidden sm:block lg:hidden" src="@Url.Content(@item.Imagen)" alt="bag" />
-                            <img class="sm:hidden" src="@Url.Content(@item.Imagen)" alt="bag" />
+                            <img class="hidden lg:block" src="@item.Imagen" alt="bag" />
+                            <img class="hidden sm:block lg:hidden" src="@item.Imagen" alt="bag" />
+                            <img class="sm:hidden" src="@item.Imagen" alt="bag" />
                             <button aria-label="close" class="top-4 right-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 absolute p-1.5 bg-gray-800 dark:bg-white dark:text-gray-800 text-white hover:text-gray-400">
                                 <a asp-route-ideliminar="@item.IdProducto" asp-controller="Productos" asp-action="Favoritos">
                                     <svg class="fil-current" width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -57,38 +61,3 @@
         </div>
     </div>
 </div>
-@*<script>
-    // more free and premium Tailwind CSS components at https://tailwinduikit.com/
-    handleClick1 = (flag) => {
-        let icon = document.getElementById("chevronDown1");
-        let icon2 = document.getElementById("chevronUp1");
-        let menu = document.getElementById("menu1");
-        if (flag) {
-            menu.classList.toggle("hidden");
-            icon.classList.toggle("hidden");
-            icon2.classList.toggle("hidden");
-        }
-    };
-
-    handleClick2 = (flag) => {
-        let icon = document.getElementById("chevronDown2");
-        let icon2 = document.getElementById("chevronUp2");
-        let menu = document.getElementById("menu2");
-        if (flag) {
-            menu.classList.toggle("hidden");
-            icon.classList.toggle("hidden");
-            icon2.classList.toggle("hidden");
-        }
-    };
-
-    handleClick3 = (flag) => {
-        let icon = document.getElementById("chevronDown3");
-        let icon2 = document.getElementById("chevronUp3");
-        let menu = document.getElementById("menu3");
-        if (flag) {
-            menu.classList.toggle("hidden");
-            icon.classList.toggle("hidden");
-            icon2.classList.toggle("hidden");
-        }
-    };
-</script>*@

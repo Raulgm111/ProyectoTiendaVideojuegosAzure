@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
-using ProyectoTiendaVideojuegosAzure.Models;
 using NugetProyectoTinedaVideojuegosAzure;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -196,6 +195,7 @@ namespace ProyectoTiendaVideojuegosAzure.Services
             enlace.Subcategorias = await this.CallApiAsync<List<SubCategoria>>(requestSubCategorias);
             return enlace;
         }
+
 
         public async Task<CategoriasViewModel> VistasDetalles(int idproducto, int? idproductoAñadir, int? idproductoAñadirFav)
         {

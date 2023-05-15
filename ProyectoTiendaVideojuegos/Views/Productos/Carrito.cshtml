@@ -21,7 +21,11 @@
                     </div>
                     @if (Context.Session.GetObject<List<int>>("CARRITO") == null && Model == null)
                     {
-                        <p>No hay productos en el carrito</p>
+                        @if (ViewBag.MensajeCarritoVacio != null)
+                            {
+                                <p>@ViewBag.MensajeCarritoVacio</p>
+                            }
+
                     }else{
                     @foreach (var item in Model)
                         {
@@ -29,7 +33,7 @@
                             <!-- product item 1 -->
                             <li class="flex py-6">
                                 <div class="h-32 w-24 flex-shrink-0 overflow-hidden rounded-sm border bg-neutral-50">
-                                    <img src="@Url.Content(@item.Imagen)" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="h-full w-full object-cover object-center" />
+                                        <img src="@item.Imagen" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="h-full w-full object-cover object-center" />
                                 </div>
 
                                 <div class="ml-4 flex flex-1 flex-col">
