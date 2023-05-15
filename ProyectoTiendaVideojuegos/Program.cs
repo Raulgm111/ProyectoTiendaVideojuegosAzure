@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using ProyectoTiendaVideojuegos.Data;
 using ProyectoTiendaVideojuegosAzure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,10 +19,6 @@ builder.Services.AddAuthorization(options =>
 string connectionString =
     builder.Configuration.GetConnectionString("SqlAzure");
 builder.Services.AddTransient<ServiceApiProductos>();
-builder.Services.AddDbContext<TiendaContext>
-    (options => options.UseSqlServer(connectionString));
-builder.Services.AddDbContext<UsuariosContext>
-    (options => options.UseSqlServer(connectionString));
 
 builder.Services.AddAuthentication(options =>
 {

@@ -10,7 +10,6 @@ using ProyectoTiendaVideojuegos.Extensions;
 using ProyectoTiendaVideojuegos.Filters;
 using Microsoft.CodeAnalysis;
 using ProyectoTiendaVideojuegos.Helpers;
-using ProyectoTiendaVideojuegos.Data;
 
 namespace ProyectoTiendaVideojuegosAzure.Services
 {
