@@ -50,12 +50,14 @@ namespace ProyectoTiendaVideojuegos.Controllers
         }
 
         [HttpPost]
+        [AuthorizeClientes]
         public async Task<IActionResult> VistasDetalles(int idproducto, int cantidad, string accion)
         {
             await this.service.VistasDetalles(idproducto, cantidad, accion);
             return RedirectToAction("MisVistas");
         }
 
+        [AuthorizeClientes]
         public async Task<IActionResult> Carrito(int? idproductoCarrito, int? ideliminar, int? eliminarTodo, int? cantidad)
         {
             List<Producto> carrito = await this.service.Carrito(idproductoCarrito, ideliminar, eliminarTodo, cantidad);
@@ -69,36 +71,42 @@ namespace ProyectoTiendaVideojuegos.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Pedidos(int idcliente)
+        public async Task<IActionResult> Pedidos(Producto p)
         {
-            await this.service.Pedidos();
+            await this.service.Pedidos(p);
+            int idcliente = int.Parse(HttpContext.User.FindFirst("IdCliente").Value);
             return RedirectToAction("MostrarPedidos", new { idcliente = idcliente });
         }
 
+        [AuthorizeClientes]
         public async Task<IActionResult> Favoritos(int? idproductoFav, int? ideliminar)
         {
             List<Producto> fav = await this.service.Favoritos(idproductoFav, ideliminar);
             return View(fav);
         }
 
+        [AuthorizeClientes(Policy = "AdminOnly")]
         public async Task<IActionResult> GetProductosAdmin()
         {
             List<Producto> productos = await this.service.GetProductosAdmin();
             return View(productos);
         }
 
+        [AuthorizeClientes(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteProducto(int ididproducto)
         {
             Producto producto = await this.service.DeleteProducto(ididproducto);
             return View(producto);
         }
 
+        [AuthorizeClientes(Policy = "AdminOnly")]
         public async Task<IActionResult> EliminarProducto(int ididproducto)
         {
             await this.service.EliminarProducto(ididproducto);
             return RedirectToAction("GetProductosAdmin");
         }
 
+        [AuthorizeClientes(Policy = "AdminOnly")]
         public async Task<IActionResult> EditarProdAdmin(int idproducto)
         {
             Producto producto = await this.service.EditarProdAdmin(idproducto);
@@ -106,6 +114,7 @@ namespace ProyectoTiendaVideojuegos.Controllers
         }
 
         [HttpPost]
+        [AuthorizeClientes(Policy = "AdminOnly")]
         public async Task<IActionResult> EditarProdAdmin(Producto producto)
         {
             await this.service.EditarProdAdmin(producto);

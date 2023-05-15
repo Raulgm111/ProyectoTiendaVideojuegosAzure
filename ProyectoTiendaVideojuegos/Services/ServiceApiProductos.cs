@@ -284,7 +284,6 @@ namespace ProyectoTiendaVideojuegosAzure.Services
 
         public async Task<List<Producto>> Carrito(int? idproductoCarrito, int? ideliminar, int? eliminarTodo, int? cantidad)
         {
-            string request = "/api/productos/BuscarProductoCarrito";
             List<int> carrito = _httpContextAccessor.HttpContext.Session.GetObject<List<int>>("CARRITO");
             if (carrito == null)
             {
@@ -360,21 +359,54 @@ namespace ProyectoTiendaVideojuegosAzure.Services
             return pedidos;
         }
 
-        public async Task Pedidos()
+        public async Task Pedidos(Producto p)
         {
-            string requestBuscarProducto = "/api/productos/BuscarProductoCarrito";
-            List<int> carrito = _httpContextAccessor.HttpContext.Session.GetObject<List<int>>("CARRITO");
-            int idCliente = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("IdCliente").Value);
+            using (HttpClient client = new HttpClient())
+            {
+                List<int> carrito = _httpContextAccessor.HttpContext.Session.GetObject<List<int>>("CARRITO");
+                int idCliente = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("IdCliente").Value);
 
-            List<Producto> productos = await this.CallApiAsync<List<Producto>>(requestBuscarProducto);
+                string requestBuscarProducto = $"/api/productos/BuscarProductoCarrito?idproductoCarrito={string.Join("&idproductoCarrito=", carrito)}";
+                List<Producto> productos = await this.CallApiAsync<List<Producto>>(requestBuscarProducto);
 
-            int precioTotal = productos.Sum(p => p.Precio);
-            string requestAgregarPedido = "/api/pedidos/AgregarPedido/" + idCliente + "/" + precioTotal;
-            await this.CallApiAsync<List<Producto>>(requestAgregarPedido);
+                int precioTotal = productos.Sum(prod => prod.Precio);
 
-            _httpContextAccessor.HttpContext.Session.Remove("CARRITO");
+                string requestAgregarPedido = $"/api/pedidos/AgregarPedido/{idCliente}/{precioTotal}";
 
+                // Crear una lista de objetos anónimos con los valores necesarios
+                var productosNuevos = productos.Select(prod => new
+                {
+                    IdProducto = prod.IdProducto,
+                    IdCategoria = prod.IdCategoria,
+                    IdSubCategoria = prod.IdSubCategoria,
+                    NombreProducto = p.NombreProducto,
+                    Lanzamiento = prod.Lanzamiento,
+                    Imagen = prod.Imagen,
+                    Precio = prod.Precio,
+                    Descripcion = prod.Descripcion,
+                    Genero = prod.Genero
+                }).ToList();
+
+                // Convertir la lista de productos a formato JSON
+                string jsonCubo =
+                    JsonConvert.SerializeObject(productosNuevos);
+                string url = $"{requestAgregarPedido}?productos={Uri.EscapeDataString(jsonCubo)}&cantidad={carrito.Count}";
+                StringContent content =
+                    new StringContent(jsonCubo, Encoding.UTF8, "application/json");
+                HttpResponseMessage response =
+                    await client.PostAsync(url, content);
+
+                _httpContextAccessor.HttpContext.Session.Remove("CARRITO");
+            }
         }
+
+
+
+
+
+
+
+
 
         public async Task<List<Producto>> Favoritos(int? idproductoFav, int? ideliminar)
         {
