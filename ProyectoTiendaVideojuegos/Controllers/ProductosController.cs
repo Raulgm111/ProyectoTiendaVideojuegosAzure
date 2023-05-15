@@ -25,6 +25,27 @@ namespace ProyectoTiendaVideojuegos.Controllers
         public async Task<IActionResult> BuscarProductos(string buscar)
         {
             List<Producto> productos = await this.service.BuscarProductos(buscar);
+            foreach (Producto prod in productos)
+            {
+                string blobname = prod.Imagen;
+                if (blobname != null)
+                {
+                    BlobContainerClient blobcontainerclient = await this.serviceStorageBlobs.GetContainersAsync(this.containerName);
+                    BlobClient blocclient = blobcontainerclient.GetBlobClient(blobname);
+
+                    BlobSasBuilder sasbuilder = new BlobSasBuilder()
+                    {
+                        BlobContainerName = this.containerName,
+                        BlobName = blobname,
+                        Resource = "b",
+                        StartsOn = DateTimeOffset.UtcNow,
+                        ExpiresOn = DateTime.UtcNow.AddHours(1)
+                    };
+                    sasbuilder.SetPermissions(BlobSasPermissions.Read);
+                    var uri = blocclient.GenerateSasUri(sasbuilder);
+                    prod.Imagen = uri.ToString();
+                }
+            }
             return PartialView("_ResultadosBusqueda", productos);
         }
 
