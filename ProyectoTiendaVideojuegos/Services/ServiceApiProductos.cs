@@ -392,9 +392,10 @@ namespace ProyectoTiendaVideojuegosAzure.Services
 
                 // Convertir la lista de productos a formato JSON
                 string jsonCubo = JsonConvert.SerializeObject(productosNuevos);
+                string encodedJsonCubo = Uri.EscapeDataString(jsonCubo);
 
-                string url = $"{requestAgregarPedido}?productos={jsonCubo}&cantidad={carrito.Count}";
-                HttpContent content = new StringContent(jsonCubo, Encoding.UTF8, "application/json");
+                string url = $"{requestAgregarPedido}?productos={encodedJsonCubo}&cantidad={carrito.Count}";
+                HttpContent content = new StringContent(encodedJsonCubo, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.PostAsync(url, content);
 
 
