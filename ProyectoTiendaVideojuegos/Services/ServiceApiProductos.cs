@@ -377,25 +377,24 @@ namespace ProyectoTiendaVideojuegosAzure.Services
                 string requestAgregarPedido = $"/api/pedidos/AgregarPedido/{idCliente}/{precioTotal}";
 
                 // Crear una lista de objetos anónimos con los valores necesarios
-                var productosNuevos = productos.Select(prod => new
+                var productosNuevos = productos.Select(prod => new Producto
                 {
-                    idProducto = prod.IdProducto,
-                    idCategoria = prod.IdCategoria,
-                    idSubCategoria = prod.IdSubCategoria,
-                    nombreProducto = prod.NombreProducto,
-                    lanzamiento = prod.Lanzamiento,
-                    imagen = prod.Imagen,
-                    precio = prod.Precio,
-                    descripcion = prod.Descripcion,
-                    genero = prod.Genero
+                    IdProducto = prod.IdProducto,
+                    IdCategoria = prod.IdCategoria,
+                    IdSubCategoria = prod.IdSubCategoria,
+                    NombreProducto = prod.NombreProducto,
+                    Lanzamiento = prod.Lanzamiento,
+                    Imagen = prod.Imagen,
+                    Precio = prod.Precio,
+                    Descripcion = prod.Descripcion,
+                    Genero = prod.Genero
                 }).ToList();
 
                 // Convertir la lista de productos a formato JSON
                 string jsonCubo = JsonConvert.SerializeObject(productosNuevos);
-                string encodedJsonCubo = Uri.EscapeDataString(jsonCubo);
 
-                string url = $"{requestAgregarPedido}?productos={encodedJsonCubo}&cantidad={carrito.Count}";
-                HttpContent content = new StringContent(encodedJsonCubo, Encoding.UTF8, "application/json");
+                string url = $"{requestAgregarPedido}?productos={jsonCubo}&cantidad={carrito.Count}";
+                HttpContent content = new StringContent(jsonCubo, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.PostAsync(url, content);
 
 
